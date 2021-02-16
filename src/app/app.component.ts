@@ -9,11 +9,11 @@ import { Cal } from './Cal.model';
 
 export class AppComponent implements OnInit{
   title = 'Calculator';
-  lastExpression = "";
+  expression = "";
   lastOprator!:string;
   lastvalue!:number;
   flag = true;
-  pointFlag = false;
+  // pointFlag = false;
   alertForInvalidInput = "";
   recent = false;
   inputValue!:string;
@@ -35,6 +35,9 @@ export class AppComponent implements OnInit{
     if(document.getElementById(event.key)){
       document.getElementById(event.key)?.focus();
       document.getElementById(event.key)?.click();
+      setTimeout(() => {
+        document.getElementById(event.key)?.blur();
+      },250);
     }
     else{
       console.log(event.key,"is not valid");
@@ -43,35 +46,7 @@ export class AppComponent implements OnInit{
         this.alertForInvalidInput = "";
       },3000);
     }
-    // if(this.isNumber(event.key)){
-    //   this.inNumber(+event.key);
-    // }
-    // else{
-    //   console.log(event.key);
-    //   switch(event.key){
-    //     case "Backspace":
-    //       document.getElementById(event.key)?.focus();
-    //       this.removeLastDigit();
-    //       break;
-    //     case "." || "=":
-    //       this.op(event.key);
-    //       break;
-    //     case "+" || "-" || "/":
-    //       this.oprator(event.key);
-    //       break;
-    //     case "Enter":
-    //       this.op("=");
-    //       break;
-    //     default:
-    //       console.log("wrong input");
-    //   }
-    // }
   }
-  // isNumber(i:string):boolean{
-  //   if(!isNaN(+i))
-  //     return true;
-  //   return false;
-  // }
   inNumber(n:number){
     if(this.flag){
       this.inputValue = n.toString();
@@ -85,20 +60,20 @@ export class AppComponent implements OnInit{
   }
   removeLastDigit(){
     const n = this.inputValue.length;
-    if(this.inputValue.charAt(n-1) === "."){
-      this.pointFlag = false;
-    }
+    // if(this.inputValue.charAt(n-1) === "."){
+    //   this.pointFlag = false;
+    // }
     this.inputValue = this.inputValue.slice(0,this.inputValue.length-1);
     this.flag = false;
   }
   clearExpression(){
     this.lastvalue = 0;
-    this.lastExpression = "";
+    this.expression = "";
     this.inputValue = "0";
   }
   operationWithX(n:number){
     this.inputValue = Math.pow(+this.inputValue,n).toFixed(4).toString();
-    this.lastExpression = "";
+    this.expression = "";
   }
   oprator(op:string){
     if(this.lastvalue === 0){
@@ -116,7 +91,6 @@ export class AppComponent implements OnInit{
         this.lastvalue *= +this.inputValue;
         break;
       case "/":
-        console.log(this.inputValue);
         this.lastvalue /= +this.inputValue;
         break;
       case "%":
@@ -129,8 +103,8 @@ export class AppComponent implements OnInit{
     }
     this.flag = true;
     this.lastOprator = op;
-    this.lastExpression = this.lastvalue + " " + op + " ";
-    this.pointFlag = false;
+    this.expression = this.lastvalue + " " + op + " ";
+    // this.pointFlag = false;
   }
   op(op:string){
     switch(op){
@@ -138,10 +112,16 @@ export class AppComponent implements OnInit{
         this.inputValue = (- +this.inputValue).toString();
         return;
       case ".":
-        if(!this.pointFlag && !this.flag){
-          this.inputValue += ".";
-          this.pointFlag = true;
+        if(+(this.inputValue+".") && !this.flag)
+            this.inputValue+="."
+        else if(this.flag){
+          this.inputValue = "0."
+          this.flag =false;
         }
+        // if(!this.pointFlag && !this.flag){
+        //   this.inputValue += ".";
+        //   this.pointFlag = true;
+        // }
         return;
       case "=":
         this.flag = false;
@@ -151,7 +131,7 @@ export class AppComponent implements OnInit{
         else
           this.inputValue = (+this.lastvalue).toString();
         this.lastvalue = 0;
-        this.lastExpression = "";
+        this.expression = "";
         return;
     }
   }

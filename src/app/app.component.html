@@ -12,7 +12,7 @@
         </div>
       <div class="row">
         <div class="col-md-12">
-          <p style="float: right; margin-top: -10px;">{{lastExpression}}</p>
+          <p style="float: right; margin-top: -10px;">{{expression}}</p>
           <input type="text" class="form-control" value="{{inputValue}}" readonly/>
         </div>
       </div>
@@ -30,8 +30,8 @@
             <button id="CE" class="btn btn-default btn-group btn-number" (click)="clearInput()">CE</button>
             <button id="C" class="btn btn-default btn-group btn-number" (click)="clearExpression()">C</button>
             <button id="Backspace" class="btn btn-group btn-default btn-number" (click)="removeLastDigit()">X</button>
-            <button id="/" class="btn btn-group btn-default btn-number tooltip" (click)="oprator('/')" [disabled]="inputValue === '0' && lastExpression.length!==0">/
-            <span class="tooltiptext" *ngIf="inputValue === '0' && lastExpression.length!==0">Division by Zero Not Possible</span></button>
+            <button id="/" class="btn btn-group btn-default btn-number tooltip" (click)="oprator('/')" [disabled]="inputValue === '0' && expression.length!==0">/
+            <span class="tooltiptext" *ngIf="inputValue === '0' && expression.length!==0">Division by Zero Not Possible</span></button>
           </div>
         </div>
         <div class="row">
